@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Home School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --josh: #4e73df;
+            --nancy: #1cc88a;
+            --iggie: #f6c23e;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, #224abe 100%);
+            color: white;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .topbar {
+            background-color: white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress {
+            height: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .student-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .subject-badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.6em;
+        }
+        
+        .performance-chart {
+            height: 200px;
+        }
+        
+        .bg-cbc {
+            background-color: #36b9cc !important;
+        }
+        
+        .bg-playgroup {
+            background-color: #f6c23e !important;
+        }
+        
+        .welcome-header {
+            background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            border-radius: 0.35rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .split-view {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .split-section {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .split-section:last-child {
+            border-right: none;
+        }
+        
+        .split-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .subject-score {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .student-page {
+            display: none;
+        }
+        
+        .subject-progress {
+            margin-bottom: 15px;
+        }
+        
+        .back-button {
+            margin-bottom: 20px;
+        }
+        
+        .performance-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0 d-md-block">
+                <div class="text-center my-4">
+                    <h3>David Home School</h3>
+                    <p>Family Learning Hub</p>
+                </div>
+                <hr class="my-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="dashboard-link">
+                            <i class="fas fa-home me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="assignments-link">
+                            <i class="fas fa-tasks me-2"></i>
+                            Split Assignments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-book me-2"></i>
+                            Study Materials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Progress Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar me-2"></i>
+                            Schedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog me-2"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto px-4">
+                <!-- Topbar -->
+                <div class="topbar sticky-top mb-4 py-3 px-3 d-flex justify-content-between align-items-center">
+                    <h4 class="m-0">Dashboard</h4>
+                    <div>
+                        <span class="me-3">Welcome, Tutor!</span>
+                        <i class="fas fa-bell me-3"></i>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+
+                <!-- Dashboard View -->
+                <div id="dashboard-view">
+                    <!-- Welcome Header -->
+                    <div class="welcome-header">
+                        <h1>David Home School Learning Hub</h1>
+                        <p class="lead">Supporting Josh (Grade 6), Nancy (Grade 4), and Iggie (Playgroup) with the Kenyan CBC curriculum</p>
+                    </div>
+
+                    <!-- Student Cards -->
+                    <div class="row">
+                        <!-- Josh Card -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card student-card border-left-primary h-100 py-2" data-student="josh">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Josh David - Grade 6
+                                            </div>
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                                Current Performance: 37%
+                                            </div>
+                                            <div class="h6 mb-2 font-weight-bold text-gray-800">
+                                                Target: 70% by End of Term
+                                            </div>
+                                            <div class="mt-3">
+                                                <p class="text-sm mb-1"><strong>Subject Performance:</strong></p>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">Mathematics: 50%</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">English: 34%</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 34%"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">Science & Technology: 36%</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 36%"></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nancy Card -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card student-card border-left-success h-100 py-2" data-student="nancy">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Nancy David - Grade 4
+                                            </div>
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                                Current Performance: 67%
+                                            </div>
+                                            <div class="h6 mb-2 font-weight-bold text-gray-800">
+                                                Target: 80% by End of Term
+                                            </div>
+                                            <div class="mt-3">
+                                                <p class="text-sm mb-1"><strong>Subject Performance:</strong></p>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">English: 73%</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 73%"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">CRE: 70%</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">Mathematics: 56%</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 56%"></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iggie Card -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card student-card border-left-warning h-100 py-2" data-student="iggie">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Iggie David - Playgroup
+                                            </div>
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                                Developmental Progress: Good
+                                            </div>
+                                            <div class="h6 mb-2 font-weight-bold text-gray-800">
+                                                Focus: Foundational Skills
+                                            </div>
+                                            <div class="mt-3">
+                                                <p class="text-sm mb-1"><strong>Areas to Develop:</strong></p>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">Letter Recognition</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">Number Recognition (1-10)</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 70%"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <span class="text-xs">Social Skills & Sharing</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 65%"></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-child fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Curriculum & Resources Section -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- CBC Curriculum Focus -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <h6 class="m-0 font-weight-bold text-primary">Kenyan CBC Curriculum Focus</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="font-weight-bold">Grade 6 (Josh)</h6>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Mathematics
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    English
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Science & Technology
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Social Studies
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="font-weight-bold">Grade 4 (Nancy)</h6>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Mathematics
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    English
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Kiswahili
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Environmental Activities
+                                                    <span class="badge bg-primary rounded-pill">CBC</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h6 class="font-weight-bold">Playgroup (Iggie) - Foundational Skills</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <span class="badge bg-playgroup">Language Activities</span>
+                                            <span class="badge bg-playgroup">Psychomotor Skills</span>
+                                            <span class="badge bg-playgroup">Environmental Activities</span>
+                                            <span class="badge bg-playgroup">Creative Activities</span>
+                                            <span class="badge bg-playgroup">Religious Education</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming Assignments -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Upcoming Assignments</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Student</th>
+                                                    <th>Subject</th>
+                                                    <th>Assignment</th>
+                                                    <th>Due Date</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Josh</td>
+                                                    <td>Mathematics</td>
+                                                    <td>Fractions Practice</td>
+                                                    <td>Oct 15, 2023</td>
+                                                    <td><span class="badge bg-warning">Pending</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nancy</td>
+                                                    <td>English</td>
+                                                    <td>Reading Comprehension</td>
+                                                    <td>Oct 12, 2023</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Iggie</td>
+                                                    <td>Language</td>
+                                                    <td>Letter Tracing</td>
+                                                    <td>Oct 10, 2023</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Josh</td>
+                                                    <td>Science</td>
+                                                    <td>Simple Machines Project</td>
+                                                    <td>Oct 18, 2023</td>
+                                                    <td><span class="badge bg-warning">Pending</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nancy</td>
+                                                    <td>Mathematics</td>
+                                                    <td>Multiplication Exercises</td>
+                                                    <td>Oct 14, 2023</td>
+                                                    <td><span class="badge bg-warning">Pending</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column - Resources & Quick Actions -->
+                        <div class="col-lg-4">
+                            <!-- Resources Card -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Learning Resources</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">CBC Grade 6 Materials</h6>
+                                            </div>
+                                            <p class="mb-1">Mathematics, Science & English resources</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">CBC Grade 4 Materials</h6>
+                                            </div>
+                                            <p class="mb-1">Environmental activities & language resources</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">Playgroup Activities</h6>
+                                            </div>
+                                            <p class="mb-1">Fun learning activities for early development</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">Supplementary Worksheets</h6>
+                                            </div>
+                                            <p class="mb-1">Extra practice for all subjects</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions Card -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row text-center">
+                                        <div class="col-4 mb-3">
+                                            <button class="btn btn-primary btn-circle btn-lg">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                            <div class="mt-2 small">New Assignment</div>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <button class="btn btn-success btn-circle btn-lg">
+                                                <i class="fas fa-book"></i>
+                                            </button>
+                                            <div class="mt-2 small">Add Resources</div>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <button class="btn btn-info btn-circle btn-lg">
+                                                <i class="fas fa-chart-line"></i>
+                                            </button>
+                                            <div class="mt-2 small">Progress Report</div>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <button class="btn btn-warning btn-circle btn-lg">
+                                                <i class="fas fa-calendar"></i>
+                                            </button>
+                                            <div class="mt-2 small">Schedule</div>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <button class="btn btn-danger btn-circle btn-lg">
+                                                <i class="fas fa-tasks"></i>
+                                            </button>
+                                            <div class="mt-2 small">To-Do List</div>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <button class="btn btn-secondary btn-circle btn-lg">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <div class="mt-2 small">Settings</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Josh's Individual Page -->
+                <div id="josh-page" class="student-page">
+                    <button class="btn btn-primary back-button" data-back="dashboard">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </button>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 bg-primary text-white">
+                            <h4 class="m-0">Josh David - Grade 6 Performance</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Subject Performance</h5>
+                                    <table class="table table-bordered performance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Score</th>
+                                                <th>Progress</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>English</td>
+                                                <td class="subject-score">34%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 34%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kiswahili</td>
+                                                <td class="subject-score">32%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 32%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mathematics</td>
+                                                <td class="subject-score">50%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Science & Technology</td>
+                                                <td class="subject-score">36%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 36%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Agriculture & Nutrition</td>
+                                                <td class="subject-score">44%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 44%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Social Studies</td>
+                                                <td class="subject-score">50%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>CRE</td>
+                                                <td class="subject-score">20%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Creative Arts & Sports</td>
+                                                <td class="subject-score">32%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 32%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Performance Summary</h5>
+                                    <div class="card bg-light mb-4">
+                                        <div class="card-body">
+                                            <h6>Overall Performance: 37%</h6>
+                                            <div class="progress mb-3">
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 37%"></div>
+                                            </div>
+                                            <p><strong>Areas Needing Immediate Attention:</strong></p>
+                                            <ul>
+                                                <li>CRE (20%) - Needs significant improvement</li>
+                                                <li>Kiswahili (32%) - Requires focused practice</li>
+                                                <li>English (34%) - Needs vocabulary building</li>
+                                            </ul>
+                                            <p><strong>Relative Strengths:</strong></p>
+                                            <ul>
+                                                <li>Mathematics (50%) - On track with basics</li>
+                                                <li>Social Studies (50%) - Average understanding</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5>Recommended Actions</h5>
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">CRE Flashcards</h6>
+                                                <small>Resource</small>
+                                            </div>
+                                            <p class="mb-1">Basic religious concepts and stories</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Kiswahili Vocabulary Builder</h6>
+                                                <small>Resource</small>
+                                            </div>
+                                            <p class="mb-1">Common words and phrases</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">English Grammar Exercises</h6>
+                                                <small>Assignment</small>
+                                            </div>
+                                            <p class="mb-1">Basic sentence structure practice</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nancy's Individual Page -->
+                <div id="nancy-page" class="student-page">
+                    <button class="btn btn-primary back-button" data-back="dashboard">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </button>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 bg-success text-white">
+                            <h4 class="m-0">Nancy David - Grade 4 Performance</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Subject Performance</h5>
+                                    <table class="table table-bordered performance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Score</th>
+                                                <th>Progress</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>English</td>
+                                                <td class="subject-score">73%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 73%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kiswahili</td>
+                                                <td class="subject-score">58%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 58%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mathematics</td>
+                                                <td class="subject-score">56%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 56%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Science & Technology</td>
+                                                <td class="subject-score">60%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 60%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Agriculture & Nutrition</td>
+                                                <td class="subject-score">64%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 64%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Social Studies</td>
+                                                <td class="subject-score">67%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 67%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>CRE</td>
+                                                <td class="subject-score">70%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Creative Arts & Sports</td>
+                                                <td class="subject-score">70%</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Performance Summary</h5>
+                                    <div class="card bg-light mb-4">
+                                        <div class="card-body">
+                                            <h6>Overall Performance: 67%</h6>
+                                            <div class="progress mb-3">
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: 67%"></div>
+                                            </div>
+                                            <p><strong>Areas of Strength:</strong></p>
+                                            <ul>
+                                                <li>English (73%) - Excellent reading skills</li>
+                                                <li>CRE (70%) - Good understanding of concepts</li>
+                                                <li>Creative Arts & Sports (70%) - Very creative</li>
+                                            </ul>
+                                            <p><strong>Areas Needing Improvement:</strong></p>
+                                            <ul>
+                                                <li>Mathematics (56%) - Needs practice with multiplication</li>
+                                                <li>Kiswahili (58%) - Vocabulary building needed</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5>Recommended Actions</h5>
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Multiplication Games</h6>
+                                                <small>Activity</small>
+                                            </div>
+                                            <p class="mb-1">Fun ways to practice times tables</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Kiswahili Storybooks</h6>
+                                                <small>Resource</small>
+                                            </div>
+                                            <p class="mb-1">Age-appropriate reading materials</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Advanced English Reading</h6>
+                                                <small>Challenge</small>
+                                            </div>
+                                            <p class="mb-1">More complex texts to further develop skills</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Iggie's Individual Page -->
+                <div id="iggie-page" class="student-page">
+                    <button class="btn btn-primary back-button" data-back="dashboard">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </button>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 bg-warning text-dark">
+                            <h4 class="m-0">Iggie David - Playgroup Development</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Developmental Progress</h5>
+                                    <div class="card bg-light mb-4">
+                                        <div class="card-body">
+                                            <h6>Overall Progress: Good</h6>
+                                            <div class="progress mb-3">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                                            </div>
+                                            <p>Iggie is making good progress in foundational skills appropriate for playgroup level.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5>Key Development Areas</h5>
+                                    <table class="table table-bordered performance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Area</th>
+                                                <th>Progress</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Letter Recognition</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-success">Excellent</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number Recognition (1-10)</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 70%"></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-info">Good</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Social Skills & Sharing</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 65%"></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-warning">Developing</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Color Recognition</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%"></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-success">Very Good</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fine Motor Skills</td>
+                                                <td>
+                                                    <div class="progress subject-progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 72%"></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-info">Good</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Development Summary</h5>
+                                    <div class="card bg-light mb-4">
+                                        <div class="card-body">
+                                            <p><strong>Areas of Strength:</strong></p>
+                                            <ul>
+                                                <li>Letter Recognition - Knows most of the alphabet</li>
+                                                <li>Color Recognition - Identifies basic colors well</li>
+                                            </ul>
+                                            <p><strong>Areas Needing Support:</strong></p>
+                                            <ul>
+                                                <li>Social Skills & Sharing - Working on taking turns</li>
+                                                <li>Number Recognition - Still mastering 6-10</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5>Recommended Activities</h5>
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Sharing Games</h6>
+                                                <small>Activity</small>
+                                            </div>
+                                            <p class="mb-1">Fun activities that encourage turn-taking</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Number Flashcards</h6>
+                                                <small>Resource</small>
+                                            </div>
+                                            <p class="mb-1">Visual aids for number recognition</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Alphabet Songs</h6>
+                                                <small>Resource</small>
+                                            </div>
+                                            <p class="mb-1">Catchy tunes to reinforce letter knowledge</p>
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">Coloring Activities</h6>
+                                                <small>Activity</small>
+                                            </div>
+                                            <p class="mb-1">Fun exercises to practice color names</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Split Assignment View -->
+                <div id="split-view" class="student-page">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Shared Assignments View</h3>
+                        <button class="btn btn-primary" data-back="dashboard">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                        </button>
+                    </div>
+                    
+                    <div class="split-view">
+                        <!-- Josh's Section -->
+                        <div class="split-section">
+                            <div class="split-header">
+                                <h4>Josh - Grade 6</h4>
+                            </div>
+                            <div class="assignment-content">
+                                <h5>Current Assignments</h5>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Mathematics: Fractions Practice</h6>
+                                        <p class="card-text">Complete exercises 1-10 on page 45 of your textbook.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: Oct 15, 2023</small>
+                                            <span class="badge bg-warning">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Science: Simple Machines Project</h6>
+                                        <p class="card-text">Create a presentation about three simple machines you use daily.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: Oct 18, 2023</small>
+                                            <span class="badge bg-warning">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mt-4">Study Resources</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Fractions Tutorial</h6>
+                                            <small>Mathematics</small>
+                                        </div>
+                                        <p class="mb-1">Video lesson on adding and subtracting fractions</p>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Simple Machines Guide</h6>
+                                            <small>Science</small>
+                                        </div>
+                                        <p class="mb-1">Interactive guide to different types of simple machines</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nancy's Section -->
+                        <div class="split-section">
+                            <div class="split-header" style="background-color: var(--secondary);">
+                                <h4>Nancy - Grade 4</h4>
+                            </div>
+                            <div class="assignment-content">
+                                <h5>Current Assignments</h5>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">English: Reading Comprehension</h6>
+                                        <p class="card-text">Read the short story and answer questions 1-5.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: Oct 12, 2023</small>
+                                            <span class="badge bg-success">Completed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Mathematics: Multiplication Exercises</h6>
+                                        <p class="card-text">Practice multiplication tables 1-10 and complete worksheet.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: Oct 14, 2023</small>
+                                            <span class="badge bg-warning">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mt-4">Study Resources</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Multiplication Games</h6>
+                                            <small>Mathematics</small>
+                                        </div>
+                                        <p class="mb-1">Fun games to practice multiplication tables</p>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Kiswahili Vocabulary</h6>
+                                            <small>Kiswahili</small>
+                                        </div>
+                                        <p class="mb-1">Flashcards for common Kiswahili words and phrases</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Iggie's Section -->
+                        <div class="split-section">
+                            <div class="split-header" style="background-color: var(--warning);">
+                                <h4>Iggie - Playgroup</h4>
+                            </div>
+                            <div class="assignment-content">
+                                <h5>Current Activities</h5>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Language: Letter Tracing</h6>
+                                        <p class="card-text">Practice tracing letters A-E with different colors.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: Oct 10, 2023</small>
+                                            <span class="badge bg-success">Completed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Numbers: Counting 1-10</h6>
+                                        <p class="card-text">Count objects around the house and match with numbers.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: Ongoing</small>
+                                            <span class="badge bg-info">In Progress</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mt-4">Learning Activities</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Alphabet Songs</h6>
+                                            <small>Language</small>
+                                        </div>
+                                        <p class="mb-1">Fun songs to learn the alphabet</p>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Counting Games</h6>
+                                            <small>Mathematics</small>
+                                        </div>
+                                        <p class="mb-1">Interactive counting activities</p>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Color Matching</h6>
+                                            <small>Art</small>
+                                        </div>
+                                        <p class="mb-1">Activities to learn and match colors</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="text-center py-4">
+                    <div class="text-muted">
+                        <small>David Home School &copy; 2025. Designed for Josh, Nancy, and Iggie's educational journey.</small>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const dashboardView = document.getElementById('dashboard-view');
+            const splitView = document.getElementById('split-view');
+            const joshPage = document.getElementById('josh-page');
+            const nancyPage = document.getElementById('nancy-page');
+            const iggiePage = document.getElementById('iggie-page');
+            const assignmentsLink = document.getElementById('assignments-link');
+            const dashboardLink = document.getElementById('dashboard-link');
+            const studentCards = document.querySelectorAll('.student-card');
+            const backButtons = document.querySelectorAll('.back-button, [data-back]');
+            
+            // Show dashboard when dashboard link is clicked
+            dashboardLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPages();
+                dashboardView.classList.remove('d-none');
+            });
+            
+            // Show split view when assignments link is clicked
+            assignmentsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPages();
+                splitView.classList.remove('d-none');
+            });
+            
+            // Show individual student pages when cards are clicked
+            studentCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const student = this.getAttribute('data-student');
+                    hideAllPages();
+                    document.getElementById(`${student}-page`).classList.remove('d-none');
+                });
+            });
+            
+            // Back button functionality
+            backButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    hideAllPages();
+                    dashboardView.classList.remove('d-none');
+                });
+            });
+            
+            // Function to hide all pages
+            function hideAllPages() {
+                dashboardView.classList.add('d-none');
+                splitView.classList.add('d-none');
+                joshPage.classList.add('d-none');
+                nancyPage.classList.add('d-none');
+                iggiePage.classList.add('d-none');
+            }
+        });
+    </script>
+</body>
+</html>
