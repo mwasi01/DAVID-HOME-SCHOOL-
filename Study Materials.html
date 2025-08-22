@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Materials - David Home School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --josh: #4e73df;
+            --nancy: #1cc88a;
+            --iggie: #f6c23e;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, #224abe 100%);
+            color: white;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .topbar {
+            background-color: white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .subject-card {
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .material-card {
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .material-card:hover {
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+        }
+        
+        .josh-card {
+            border-left: 4px solid var(--josh) !important;
+        }
+        
+        .nancy-card {
+            border-left: 4px solid var(--nancy) !important;
+        }
+        
+        .iggie-card {
+            border-left: 4px solid var(--iggie) !important;
+        }
+        
+        .resource-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .pdf-icon {
+            color: #e74a3b;
+        }
+        
+        .video-icon {
+            color: #4e73df;
+        }
+        
+        .link-icon {
+            color: #1cc88a;
+        }
+        
+        .doc-icon {
+            color: #36b9cc;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary);
+        }
+        
+        .grade-badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.6em;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box .form-control {
+            padding-left: 40px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #b7b9cc;
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0 d-md-block">
+                <div class="text-center my-4">
+                    <h3>David Home School</h3>
+                    <p>Family Learning Hub</p>
+                </div>
+                <hr class="my-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="split-assignments.html">
+                            <i class="fas fa-tasks me-2"></i>
+                            Split Assignments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-book me-2"></i>
+                            Study Materials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Progress Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar me-2"></i>
+                            Schedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog me-2"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto px-4">
+                <!-- Topbar -->
+                <div class="topbar sticky-top mb-4 py-3 px-3 d-flex justify-content-between align-items-center">
+                    <h4 class="m-0">Study Materials</h4>
+                    <div>
+                        <span class="me-3">Welcome, Tutor!</span>
+                        <i class="fas fa-bell me-3"></i>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+
+                <!-- Header and Search -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h1>Study Materials Library</h1>
+                        <p class="lead">Educational resources for Josh (Grade 6), Nancy (Grade 4), and Iggie (Playgroup)</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-control" placeholder="Search materials...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Pills -->
+                <ul class="nav nav-pills mb-4" id="materialsTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab">All Materials</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="josh-tab" data-bs-toggle="pill" data-bs-target="#josh" type="button" role="tab">Josh (Grade 6)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="nancy-tab" data-bs-toggle="pill" data-bs-target="#nancy" type="button" role="tab">Nancy (Grade 4)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="iggie-tab" data-bs-toggle="pill" data-bs-target="#iggie" type="button" role="tab">Iggie (Playgroup)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="subjects-tab" data-bs-toggle="pill" data-bs-target="#subjects" type="button" role="tab">By Subject</button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="materialsTabContent">
+                    <!-- All Materials Tab -->
+                    <div class="tab-pane fade show active" id="all" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-graduation-cap me-2"></i>Grade 6 Materials (Josh)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mathematics</h5>
+                                        <p class="card-text">Resources for fractions, decimals, geometry, and more</p>
+                                        <span class="badge bg-primary grade-badge">Grade 6</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">English</h5>
+                                        <p class="card-text">Grammar, comprehension, and creative writing resources</p>
+                                        <span class="badge bg-primary grade-badge">Grade 6</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Science & Technology</h5>
+                                        <p class="card-text">Simple machines, energy, and scientific method</p>
+                                        <span class="badge bg-primary grade-badge">Grade 6</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Social Studies</h5>
+                                        <p class="card-text">Kenyan history, government, and geography</p>
+                                        <span class="badge bg-primary grade-badge">Grade 6</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category-header mt-5">
+                            <h4><i class="fas fa-user me-2"></i>Grade 4 Materials (Nancy)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mathematics</h5>
+                                        <p class="card-text">Multiplication, division, fractions, and measurements</p>
+                                        <span class="badge bg-success grade-badge">Grade 4</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-success">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">English</h5>
+                                        <p class="card-text">Reading comprehension, grammar, and vocabulary</p>
+                                        <span class="badge bg-success grade-badge">Grade 4</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-success">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Kiswahili</h5>
+                                        <p class="card-text">Vocabulary, grammar, and reading practice</p>
+                                        <span class="badge bg-success grade-badge">Grade 4</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-success">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Environmental Activities</h5>
+                                        <p class="card-text">Plants, animals, and environmental conservation</p>
+                                        <span class="badge bg-success grade-badge">Grade 4</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-success">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category-header mt-5">
+                            <h4><i class="fas fa-child me-2"></i>Playgroup Materials (Iggie)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Language Activities</h5>
+                                        <p class="card-text">Letter recognition, phonics, and vocabulary building</p>
+                                        <span class="badge bg-warning grade-badge">Playgroup</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-warning">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mathematics</h5>
+                                        <p class="card-text">Counting, number recognition, and basic shapes</p>
+                                        <span class="badge bg-warning grade-badge">Playgroup</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-warning">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Creative Activities</h5>
+                                        <p class="card-text">Drawing, coloring, and craft activities</p>
+                                        <span class="badge bg-warning grade-badge">Playgroup</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-warning">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card subject-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Psychomotor Skills</h5>
+                                        <p class="card-text">Fine and gross motor skill development</p>
+                                        <span class="badge bg-warning grade-badge">Playgroup</span>
+                                        <div class="mt-3">
+                                            <a href="#" class="btn btn-sm btn-outline-warning">View Materials</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Josh's Materials Tab -->
+                    <div class="tab-pane fade" id="josh" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-graduation-cap me-2"></i>Josh's Study Materials - Grade 6</h4>
+                        </div>
+                        
+                        <h5 class="mt-4">Mathematics Resources</h5>
+                        <div class="card material-card josh-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf pdf-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Fractions Practice Worksheets</h6>
+                                </div>
+                                <p class="card-text">Practice problems for adding, subtracting, and simplifying fractions</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Updated: Oct 10, 2023</small>
+                                    <a href="#" class="btn btn-sm btn-primary">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card material-card josh-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-video video-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Introduction to Geometry</h6>
+                                </div>
+                                <p class="card-text">Video lesson covering basic geometric concepts and shapes</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Length: 15 minutes</small>
+                                    <a href="#" class="btn btn-sm btn-primary">Watch</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4">English Resources</h5>
+                        <div class="card material-card josh-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-word doc-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Creative Writing Prompts</h6>
+                                </div>
+                                <p class="card-text">30 writing prompts to improve creative writing skills</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Updated: Oct 5, 2023</small>
+                                    <a href="#" class="btn btn-sm btn-primary">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card material-card josh-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-link link-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Grammar Practice Online</h6>
+                                </div>
+                                <p class="card-text">Interactive website for practicing English grammar rules</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">External Resource</small>
+                                    <a href="#" class="btn btn-sm btn-primary">Visit</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4">Science & Technology Resources</h5>
+                        <div class="card material-card josh-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf pdf-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Simple Machines Guide</h6>
+                                </div>
+                                <p class="card-text">Comprehensive guide to the six simple machines with examples</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">12 pages</small>
+                                    <a href="#" class="btn btn-sm btn-primary">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nancy's Materials Tab -->
+                    <div class="tab-pane fade" id="nancy" role="tabpanel">
+                        <div class="category-header" style="background: linear-gradient(90deg, #1cc88a 0%, #13855c 100%);">
+                            <h4><i class="fas fa-user me-2"></i>Nancy's Study Materials - Grade 4</h4>
+                        </div>
+                        
+                        <h5 class="mt-4">Mathematics Resources</h5>
+                        <div class="card material-card nancy-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf pdf-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Multiplication Worksheets</h6>
+                                </div>
+                                <p class="card-text">Practice sheets for multiplication tables 1-10</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Updated: Oct 12, 2023</small>
+                                    <a href="#" class="btn btn-sm btn-success">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card material-card nancy-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-gamepad video-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Multiplication Games</h6>
+                                </div>
+                                <p class="card-text">Interactive games to practice multiplication facts</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Online Activity</small>
+                                    <a href="#" class="btn btn-sm btn-success">Play</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4">English Resources</h5>
+                        <div class="card material-card nancy-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-book doc-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Reading Comprehension Passages</h6>
+                                </div>
+                                <p class="card-text">Short stories with comprehension questions for practice</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">15 passages</small>
+                                    <a href="#" class="btn btn-sm btn-success">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4">Kiswahili Resources</h5>
+                        <div class="card material-card nancy-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf pdf-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Kiswahili Vocabulary Flashcards</h6>
+                                </div>
+                                <p class="card-text">Printable flashcards for common Kiswahili words and phrases</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">50 cards</small>
+                                    <a href="#" class="btn btn-sm btn-success">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Iggie's Materials Tab -->
+                    <div class="tab-pane fade" id="iggie" role="tabpanel">
+                        <div class="category-header" style="background: linear-gradient(90deg, #f6c23e 0%, #dda20a 100%);">
+                            <h4><i class="fas fa-child me-2"></i>Iggie's Learning Materials - Playgroup</h4>
+                        </div>
+                        
+                        <h5 class="mt-4">Language Activities</h5>
+                        <div class="card material-card iggie-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf pdf-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Alphabet Tracing Worksheets</h6>
+                                </div>
+                                <p class="card-text">Printable worksheets for tracing letters A-Z</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">26 pages</small>
+                                    <a href="#" class="btn btn-sm btn-warning">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card material-card iggie-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-music video-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Alphabet Songs Collection</h6>
+                                </div>
+                                <p class="card-text">Fun songs to help learn the alphabet</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">10 videos</small>
+                                    <a href="#" class="btn btn-sm btn-warning">Watch</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4">Mathematics Activities</h5>
+                        <div class="card material-card iggie-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf pdf-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Number Recognition Cards</h6>
+                                </div>
+                                <p class="card-text">Colorful cards for numbers 1-10 with pictures</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">10 cards</small>
+                                    <a href="#" class="btn btn-sm btn-warning">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card material-card iggie-card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-dice video-icon resource-icon"></i>
+                                    <h6 class="card-title mb-0">Counting Games</h6>
+                                </div>
+                                <p class="card-text">Interactive counting activities and games</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">5 activities</small>
+                                    <a href="#" class="btn btn-sm btn-warning">Play</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- By Subject Tab -->
+                    <div class="tab-pane fade" id="subjects" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-book me-2"></i>Materials by Subject Area</h4>
+                        </div>
+                        
+                        <div class="accordion" id="subjectAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="mathHeading">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#mathCollapse">
+                                        Mathematics
+                                    </button>
+                                </h2>
+                                <div id="mathCollapse" class="accordion-collapse collapse show" data-bs-parent="#subjectAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Grade 6</h6>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Fractions Practice Worksheets</li>
+                                                    <li class="list-group-item">Geometry Introduction Video</li>
+                                                    <li class="list-group-item">Decimal Operations Guide</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Grade 4</h6>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Multiplication Worksheets</li>
+                                                    <li class="list-group-item">Division Practice Problems</li>
+                                                    <li class="list-group-item">Measurement Activities</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="englishHeading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#englishCollapse">
+                                        English
+                                    </button>
+                                </h2>
+                                <div id="englishCollapse" class="accordion-collapse collapse" data-bs-parent="#subjectAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Grade 6</h6>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Creative Writing Prompts</li>
+                                                    <li class="list-group-item">Reading Comprehension Exercises</li>
+                                                    <li class="list-group-item">Grammar Practice Worksheets</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Grade 4</h6>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Reading Comprehension Passages</li>
+                                                    <li class="list-group-item">Vocabulary Building Activities</li>
+                                                    <li class="list-group-item">Spelling Practice Sheets</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="scienceHeading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scienceCollapse">
+                                        Science & Technology
+                                    </button>
+                                </h2>
+                                <div id="scienceCollapse" class="accordion-collapse collapse" data-bs-parent="#subjectAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Grade 6</h6>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Simple Machines Guide</li>
+                                                    <li class="list-group-item">Energy & Motion Experiments</li>
+                                                    <li class="list-group-item">Scientific Method Worksheets</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Grade 4</h6>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Plant Growth Observation Journal</li>
+                                                    <li class="list-group-item">Animal Classification Activities</li>
+                                                    <li class="list-group-item">Weather & Climate Resources</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="text-center py-4 mt-5">
+                    <div class="text-muted">
+                        <small>David Home School &copy; 2023. Designed for Josh, Nancy, and Iggie's educational journey.</small>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simple search functionality
+            const searchBox = document.querySelector('.search-box input');
+            const materialCards = document.querySelectorAll('.material-card');
+            const subjectCards = document.querySelectorAll('.subject-card');
+            
+            searchBox.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                // Search through material cards
+                materialCards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const description = card.querySelector('.card-text').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Search through subject cards
+                subjectCards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const description = card.querySelector('.card-text').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

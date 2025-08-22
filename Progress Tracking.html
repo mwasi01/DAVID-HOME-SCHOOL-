@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking - David Home School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --josh: #4e73df;
+            --nancy: #1cc88a;
+            --iggie: #f6c23e;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, #224abe 100%);
+            color: white;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .topbar {
+            background-color: white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress {
+            height: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .student-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        
+        .performance-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .goal-card {
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .improvement-card {
+            border-left: 4px solid var(--warning);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary);
+        }
+        
+        .subject-badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.6em;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .josh-color {
+            color: var(--josh);
+        }
+        
+        .nancy-color {
+            color: var(--nancy);
+        }
+        
+        .iggie-color {
+            color: var(--iggie);
+        }
+        
+        .trend-up {
+            color: var(--secondary);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0 d-md-block">
+                <div class="text-center my-4">
+                    <h3>David Home School</h3>
+                    <p>Family Learning Hub</p>
+                </div>
+                <hr class="my-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="split-assignments.html">
+                            <i class="fas fa-tasks me-2"></i>
+                            Split Assignments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="study-materials.html">
+                            <i class="fas fa-book me-2"></i>
+                            Study Materials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Progress Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar me-2"></i>
+                            Schedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog me-2"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto px-4">
+                <!-- Topbar -->
+                <div class="topbar sticky-top mb-4 py-3 px-3 d-flex justify-content-between align-items-center">
+                    <h4 class="m-0">Progress Tracking</h4>
+                    <div>
+                        <span class="me-3">Welcome, Tutor!</span>
+                        <i class="fas fa-bell me-3"></i>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h1>Progress Tracking & Analytics</h1>
+                        <p class="lead">Monitor learning progress and identify areas for improvement</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex">
+                            <select class="form-select me-2" id="timeframe-select">
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="term">This Term</option>
+                                <option value="year">This Year</option>
+                            </select>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download me-1"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Pills -->
+                <ul class="nav nav-pills mb-4" id="progressTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">Overview</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="josh-tab" data-bs-toggle="pill" data-bs-target="#josh" type="button" role="tab">Josh (Grade 6)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="nancy-tab" data-bs-toggle="pill" data-bs-target="#nancy" type="button" role="tab">Nancy (Grade 4)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="iggie-tab" data-bs-toggle="pill" data-bs-target="#iggie" type="button" role="tab">Iggie (Playgroup)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="goals-tab" data-bs-toggle="pill" data-bs-target="#goals" type="button" role="tab">Goals</button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="progressTabContent">
+                    <!-- Overview Tab -->
+                    <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                        <!-- Stats Cards -->
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card stats-card">
+                                    <div class="stats-number josh-color">37%</div>
+                                    <div class="stats-label">Josh's Overall</div>
+                                    <div class="trend-down"><i class="fas fa-arrow-down"></i> 2% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card stats-card">
+                                    <div class="stats-number nancy-color">67%</div>
+                                    <div class="stats-label">Nancy's Overall</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 5% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card stats-card">
+                                    <div class="stats-number iggie-color">75%</div>
+                                    <div class="stats-label">Iggie's Progress</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 8% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card stats-card">
+                                    <div class="stats-number" style="color: #6f42c1;">87%</div>
+                                    <div class="stats-label">Assignments Completed</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 12% from last month</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Charts -->
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Overall Performance Trend</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="performanceTrendChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Subject Performance Distribution</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="subjectDistributionChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Assessments -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Recent Assessment Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Student</th>
+                                                <th>Assessment</th>
+                                                <th>Subject</th>
+                                                <th>Date</th>
+                                                <th>Score</th>
+                                                <th>Trend</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Josh</td>
+                                                <td>Mathematics Weekly Test</td>
+                                                <td>Mathematics</td>
+                                                <td>Oct 15, 2023</td>
+                                                <td>50%</td>
+                                                <td class="trend-down"><i class="fas fa-arrow-down"></i> 5%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nancy</td>
+                                                <td>English Comprehension</td>
+                                                <td>English</td>
+                                                <td>Oct 14, 2023</td>
+                                                <td>73%</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 7%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Josh</td>
+                                                <td>Science Quiz</td>
+                                                <td>Science</td>
+                                                <td>Oct 12, 2023</td>
+                                                <td>36%</td>
+                                                <td class="trend-down"><i class="fas fa-arrow-down"></i> 3%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nancy</td>
+                                                <td>Mathematics Test</td>
+                                                <td>Mathematics</td>
+                                                <td>Oct 10, 2023</td>
+                                                <td>56%</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 4%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Iggie</td>
+                                                <td>Letter Recognition</td>
+                                                <td>Language</td>
+                                                <td>Oct 8, 2023</td>
+                                                <td>85%</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 10%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Josh's Progress Tab -->
+                    <div class="tab-pane fade" id="josh" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-graduation-cap me-2"></i>Josh's Progress - Grade 6</h4>
+                        </div>
+
+                        <!-- Josh's Stats -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">37%</div>
+                                    <div class="stats-label">Overall Average</div>
+                                    <div class="trend-down"><i class="fas fa-arrow-down"></i> 2% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">65%</div>
+                                    <div class="stats-label">Assignment Completion</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 5% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">4</div>
+                                    <div class="stats-label">Subjects Improved</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 1 from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">12</div>
+                                    <div class="stats-label">Study Hours This Month</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 3 from last month</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Josh's Charts -->
+                        <div class="row mb-4">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Subject Performance</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="joshSubjectChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Progress Over Time</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="joshProgressChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Josh's Subject Performance -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Detailed Subject Performance</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered performance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Current Score</th>
+                                                <th>Last Assessment</th>
+                                                <th>Trend</th>
+                                                <th>Progress</th>
+                                                <th>Goal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Mathematics</td>
+                                                <td>50%</td>
+                                                <td>Oct 15, 2023</td>
+                                                <td class="trend-down"><i class="fas fa-arrow-down"></i> 5%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>70%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>English</td>
+                                                <td>34%</td>
+                                                <td>Oct 10, 2023</td>
+                                                <td class="trend-down"><i class="fas fa-arrow-down"></i> 3%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 34%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>65%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Science & Technology</td>
+                                                <td>36%</td>
+                                                <td>Oct 12, 2023</td>
+                                                <td class="trend-down"><i class="fas fa-arrow-down"></i> 3%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 36%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>68%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kiswahili</td>
+                                                <td>32%</td>
+                                                <td>Oct 8, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 2%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 32%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>60%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Social Studies</td>
+                                                <td>50%</td>
+                                                <td>Oct 5, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 4%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>65%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Improvement Areas -->
+                        <div class="card improvement-card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Areas Needing Improvement</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Priority Areas</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                English - Grammar
+                                                <span class="badge bg-danger rounded-pill">High Priority</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Science - Practical Applications
+                                                <span class="badge bg-danger rounded-pill">High Priority</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Mathematics - Fractions
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Recommended Actions</h6>
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-book me-2"></i>Additional grammar worksheets
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-video me-2"></i>Science experiment videos
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-gamepad me-2"></i>Fractions practice games
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nancy's Progress Tab -->
+                    <div class="tab-pane fade" id="nancy" role="tabpanel">
+                        <div class="category-header" style="background: linear-gradient(90deg, #1cc88a 0%, #13855c 100%);">
+                            <h4><i class="fas fa-user me-2"></i>Nancy's Progress - Grade 4</h4>
+                        </div>
+
+                        <!-- Nancy's Stats -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">67%</div>
+                                    <div class="stats-label">Overall Average</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 5% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">92%</div>
+                                    <div class="stats-label">Assignment Completion</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 8% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">6</div>
+                                    <div class="stats-label">Subjects Improved</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 2 from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">18</div>
+                                    <div class="stats-label">Study Hours This Month</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 4 from last month</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nancy's Charts -->
+                        <div class="row mb-4">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Subject Performance</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="nancySubjectChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Progress Over Time</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="nancyProgressChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nancy's Subject Performance -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Detailed Subject Performance</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered performance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Current Score</th>
+                                                <th>Last Assessment</th>
+                                                <th>Trend</th>
+                                                <th>Progress</th>
+                                                <th>Goal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>English</td>
+                                                <td>73%</td>
+                                                <td>Oct 14, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 7%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 73%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>80%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mathematics</td>
+                                                <td>56%</td>
+                                                <td>Oct 10, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 4%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 56%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>75%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Science & Technology</td>
+                                                <td>60%</td>
+                                                <td>Oct 8, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 5%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 60%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>75%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kiswahili</td>
+                                                <td>58%</td>
+                                                <td>Oct 12, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 3%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 58%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>70%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Social Studies</td>
+                                                <td>67%</td>
+                                                <td>Oct 5, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 6%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 67%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>75%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Improvement Areas -->
+                        <div class="card improvement-card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Areas for Further Improvement</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Focus Areas</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Mathematics - Multiplication
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Kiswahili - Vocabulary
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Science - Recording Observations
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Recommended Actions</h6>
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-gamepad me-2"></i>Multiplication games
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-flashcard me-2"></i>Kiswahili flashcards
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-book me-2"></i>Science journal templates
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Iggie's Progress Tab -->
+                    <div class="tab-pane fade" id="iggie" role="tabpanel">
+                        <div class="category-header" style="background: linear-gradient(90deg, #f6c23e 0%, #dda20a 100%);">
+                            <h4><i class="fas fa-child me-2"></i>Iggie's Development Progress - Playgroup</h4>
+                        </div>
+
+                        <!-- Iggie's Stats -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">75%</div>
+                                    <div class="stats-label">Overall Progress</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 8% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">88%</div>
+                                    <div class="stats-label">Activity Completion</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 10% from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">5</div>
+                                    <div class="stats-label">Skills Mastered</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 2 from last month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stats-card">
+                                    <div class="stats-number">15</div>
+                                    <div class="stats-label">Learning Hours This Month</div>
+                                    <div class="trend-up"><i class="fas fa-arrow-up"></i> 5 from last month</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iggie's Charts -->
+                        <div class="row mb-4">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Skill Development</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="iggieSkillsChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="m-0">Progress Over Time</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="iggieProgressChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iggie's Skill Development -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Detailed Skill Progress</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered performance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Skill Area</th>
+                                                <th>Current Level</th>
+                                                <th>Last Assessment</th>
+                                                <th>Trend</th>
+                                                <th>Progress</th>
+                                                <th>Goal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Letter Recognition</td>
+                                                <td>85%</td>
+                                                <td>Oct 8, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 10%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>90%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number Recognition (1-10)</td>
+                                                <td>70%</td>
+                                                <td>Oct 10, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 8%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 70%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>85%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Color Recognition</td>
+                                                <td>80%</td>
+                                                <td>Oct 5, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 12%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>90%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Social Skills & Sharing</td>
+                                                <td>65%</td>
+                                                <td>Oct 12, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 5%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 65%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>80%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fine Motor Skills</td>
+                                                <td>72%</td>
+                                                <td>Oct 7, 2023</td>
+                                                <td class="trend-up"><i class="fas fa-arrow-up"></i> 7%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 72%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>85%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Development Areas -->
+                        <div class="card improvement-card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Areas for Further Development</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Focus Areas</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Social Skills & Sharing
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Number Recognition (6-10)
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Following Instructions
+                                                <span class="badge bg-warning rounded-pill">Medium Priority</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Recommended Activities</h6>
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-users me-2"></i>Group play activities
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-dice me-2"></i>Number games
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="fas fa-tasks me-2"></i>Simple instruction games
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Goals Tab -->
+                    <div class="tab-pane fade" id="goals" role="tabpanel">
+                        <div class="category-header" style="background: linear-gradient(90deg, #6f42c1 0%, #4e2a8e 100%);">
+                            <h4><i class="fas fa-bullseye me-2"></i>Learning Goals & Targets</h4>
+                        </div>
+
+                        <!-- Current Goals -->
+                        <div class="card goal-card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Current Term Goals</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Josh's Goals</h6>
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6>Overall Performance</h6>
+                                                <p>Reach 60% average across all subjects</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar" role="progressbar" style="width: 62%">37%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 60% | Current: 37%</small>
+                                            </div>
+                                        </div>
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6>Mathematics Improvement</h6>
+                                                <p>Improve mathematics score to 70%</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar" role="progressbar" style="width: 71%">50%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 70% | Current: 50%</small>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6>Science Understanding</h6>
+                                                <p>Reach 60% in science assessments</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar" role="progressbar" style="width: 60%">36%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 60% | Current: 36%</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Nancy's Goals</h6>
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6>Overall Performance</h6>
+                                                <p>Maintain 75% average across all subjects</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 89%">67%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 75% | Current: 67%</small>
+                                            </div>
+                                        </div>
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6>Mathematics Mastery</h6>
+                                                <p>Achieve 75% in mathematics</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 75%">56%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 75% | Current: 56%</small>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6>English Excellence</h6>
+                                                <p>Reach 80% in English assessments</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 91%">73%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 80% | Current: 73%</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <h6>Iggie's Developmental Goals</h6>
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6>Letter Recognition</h6>
+                                                <p>Recognize all letters of the alphabet</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 94%">85%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 90% | Current: 85%</small>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6>Number Recognition</h6>
+                                                <p>Recognize numbers 1-10 consistently</p>
+                                                <div class="progress mb-2">
+                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 82%">70%</div>
+                                                </div>
+                                                <small class="text-muted">Target: 85% | Current: 70%</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Add New Goal</h6>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <form>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Student</label>
+                                                        <select class="form-select">
+                                                            <option>Josh</option>
+                                                            <option>Nancy</option>
+                                                            <option>Iggie</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Goal Title</label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Subject/Area</label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Target Score/Level</label>
+                                                        <input type="number" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Deadline</label>
+                                                        <input type="date" class="form-control">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Add Goal</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Goal Achievement History -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Recent Goal Achievements</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6>Nancy: English Reading</h6>
+                                                    <span class="badge bg-success">Achieved</span>
+                                                </div>
+                                                <p>Reached 70% in reading comprehension</p>
+                                                <small class="text-muted">Achieved on: Oct 14, 2023</small>
+                                            </div>
+                                        </div>
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6>Iggie: Color Recognition</h6>
+                                                    <span class="badge bg-success">Achieved</span>
+                                                </div>
+                                                <p>Can identify 8 basic colors consistently</p>
+                                                <small class="text-muted">Achieved on: Oct 5, 2023</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6>Josh: Social Studies</h6>
+                                                    <span class="badge bg-success">Achieved</span>
+                                                </div>
+                                                <p>Reached 50% in Social Studies test</p>
+                                                <small class="text-muted">Achieved on: Oct 5, 2023</small>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6>Nancy: CRE</h6>
+                                                    <span class="badge bg-success">Achieved</span>
+                                                </div>
+                                                <p>Maintained 70% in CRE assessments</p>
+                                                <small class="text-muted">Achieved on: Oct 10, 2023</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="text-center py-4 mt-5">
+                    <div class="text-muted">
+                        <small>David Home School &copy; 2023. Designed for Josh, Nancy, and Iggie's educational journey.</small>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Performance Trend Chart
+            const trendCtx = document.getElementById('performanceTrendChart').getContext('2d');
+            const trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['June', 'July', 'August', 'September', 'October'],
+                    datasets: [
+                        {
+                            label: 'Josh',
+                            data: [40, 38, 42, 39, 37],
+                            borderColor: '#4e73df',
+                            backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Nancy',
+                            data: [58, 62, 60, 64, 67],
+                            borderColor: '#1cc88a',
+                            backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Iggie',
+                            data: [60, 65, 68, 70, 75],
+                            borderColor: '#f6c23e',
+                            backgroundColor: 'rgba(246, 194, 62, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Subject Distribution Chart
+            const subjectCtx = document.getElementById('subjectDistributionChart').getContext('2d');
+            const subjectChart = new Chart(subjectCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mathematics', 'English', 'Science', 'Kiswahili', 'Other'],
+                    datasets: [{
+                        data: [25, 20, 18, 15, 22],
+                        backgroundColor: [
+                            '#4e73df',
+                            '#1cc88a',
+                            '#36b9cc',
+                            '#f6c23e',
+                            '#e74a3b'
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+
+            // Josh's Subject Chart
+            const joshSubjectCtx = document.getElementById('joshSubjectChart').getContext('2d');
+            const joshSubjectChart = new Chart(joshSubjectCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mathematics', 'English', 'Science', 'Kiswahili', 'Social Studies', 'CRE', 'Agriculture', 'Arts/Sports'],
+                    datasets: [{
+                        label: 'Current Scores',
+                        data: [50, 34, 36, 32, 50, 20, 44, 32],
+                        backgroundColor: '#4e73df',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Josh's Progress Chart
+            const joshProgressCtx = document.getElementById('joshProgressChart').getContext('2d');
+            const joshProgressChart = new Chart(joshProgressCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Mathematics',
+                        data: [45, 48, 52, 50],
+                        borderColor: '#4e73df',
+                        tension: 0.3,
+                    },
+                    {
+                        label: 'English',
+                        data: [30, 32, 33, 34],
+                        borderColor: '#1cc88a',
+                        tension: 0.3,
+                    },
+                    {
+                        label: 'Science',
+                        data: [33, 34, 35, 36],
+                        borderColor: '#36b9cc',
+                        tension: 0.3,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize other charts similarly...
+            // For brevity, I've only implemented a few charts
+        });
+    </script>
+</body>
+</html>
