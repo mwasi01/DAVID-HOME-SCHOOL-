@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule - David Home School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --josh: #4e73df;
+            --nancy: #1cc88a;
+            --iggie: #f6c23e;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, #224abe 100%);
+            color: white;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .topbar {
+            background-color: white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .schedule-card {
+            transition: all 0.3s;
+        }
+        
+        .schedule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .calendar-day:hover {
+            background-color: rgba(78, 115, 223, 0.1);
+        }
+        
+        .calendar-day.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .calendar-day.today {
+            border: 2px solid var(--primary);
+        }
+        
+        .time-slot {
+            border-bottom: 1px solid #e3e6f0;
+            padding: 10px 0;
+        }
+        
+        .time-slot:last-child {
+            border-bottom: none;
+        }
+        
+        .event-josh {
+            border-left: 4px solid var(--josh);
+            background-color: rgba(78, 115, 223, 0.1);
+        }
+        
+        .event-nancy {
+            border-left: 4px solid var(--nancy);
+            background-color: rgba(28, 200, 138, 0.1);
+        }
+        
+        .event-iggie {
+            border-left: 4px solid var(--iggie);
+            background-color: rgba(246, 194, 62, 0.1);
+        }
+        
+        .event-group {
+            border-left: 4px solid #6f42c1;
+            background-color: rgba(111, 66, 193, 0.1);
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .hour-block {
+            height: 60px;
+            border-bottom: 1px solid #e3e6f0;
+            position: relative;
+        }
+        
+        .hour-block:last-child {
+            border-bottom: none;
+        }
+        
+        .schedule-event {
+            position: absolute;
+            border-radius: 4px;
+            padding: 5px;
+            color: white;
+            font-size: 0.8rem;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary);
+        }
+        
+        .student-filter {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .student-filter:hover {
+            background-color: rgba(78, 115, 223, 0.1);
+        }
+        
+        .student-filter.active {
+            background-color: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0 d-md-block">
+                <div class="text-center my-4">
+                    <h3>David Home School</h3>
+                    <p>Family Learning Hub</p>
+                </div>
+                <hr class="my-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="split-assignments.html">
+                            <i class="fas fa-tasks me-2"></i>
+                            Split Assignments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="study-materials.html">
+                            <i class="fas fa-book me-2"></i>
+                            Study Materials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="progress-tracking.html">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Progress Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="schedule.html">
+                            <i class="fas fa-calendar me-2"></i>
+                            Schedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">
+                            <i class="fas fa-cog me-2"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto px-4">
+                <!-- Topbar -->
+                <div class="topbar sticky-top mb-4 py-3 px-3 d-flex justify-content-between align-items-center">
+                    <h4 class="m-0">Schedule</h4>
+                    <div>
+                        <span class="me-3">Welcome, Tutor!</span>
+                        <i class="fas fa-bell me-3"></i>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h1>Learning Schedule</h1>
+                        <p class="lead">Plan and manage daily activities for Josh, Nancy, and Iggie</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                                <i class="fas fa-plus me-1"></i> Add Event
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="fas fa-print me-1"></i> Print Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Navigation -->
+                <ul class="nav nav-pills mb-4" id="scheduleTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="weekly-tab" data-bs-toggle="pill" data-bs-target="#weekly" type="button" role="tab">Weekly View</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="daily-tab" data-bs-toggle="pill" data-bs-target="#daily" type="button" role="tab">Daily View</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="monthly-tab" data-bs-toggle="pill" data-bs-target="#monthly" type="button" role="tab">Monthly View</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="resources-tab" data-bs-toggle="pill" data-bs-target="#resources" type="button" role="tab">Resource Planning</button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="scheduleTabContent">
+                    <!-- Weekly View Tab -->
+                    <div class="tab-pane fade show active" id="weekly" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-calendar-week me-2"></i>Weekly Schedule: October 16 - 22, 2023</h4>
+                        </div>
+
+                        <!-- Student Filters -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6 class="mb-3">Filter by Student:</h6>
+                                <div class="d-flex flex-wrap">
+                                    <div class="student-filter active me-2 mb-2" data-student="all">
+                                        <i class="fas fa-users me-1"></i> All Students
+                                    </div>
+                                    <div class="student-filter me-2 mb-2" data-student="josh">
+                                        <i class="fas fa-user-graduate me-1"></i> Josh
+                                    </div>
+                                    <div class="student-filter me-2 mb-2" data-student="nancy">
+                                        <i class="fas fa-user me-1"></i> Nancy
+                                    </div>
+                                    <div class="student-filter me-2 mb-2" data-student="iggie">
+                                        <i class="fas fa-child me-1"></i> Iggie
+                                    </div>
+                                    <div class="student-filter me-2 mb-2" data-student="group">
+                                        <i class="fas fa-users me-1"></i> Group Activities
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Calendar -->
+                        <div class="card mb-4">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered m-0">
+                                        <thead>
+                                            <tr class="bg-light">
+                                                <th style="width: 12%;">Time</th>
+                                                <th style="width: 14.6%;">Monday<br>Oct 16</th>
+                                                <th style="width: 14.6%;">Tuesday<br>Oct 17</th>
+                                                <th style="width: 14.6%;">Wednesday<br>Oct 18</th>
+                                                <th style="width: 14.6%;">Thursday<br>Oct 19</th>
+                                                <th style="width: 14.6%;">Friday<br>Oct 20</th>
+                                                <th style="width: 14.6%;">Saturday<br>Oct 21</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="bg-light">8:00 - 9:00</td>
+                                                <td>
+                                                    <div class="event-josh p-2 mb-2 schedule-card">
+                                                        <small><strong>Josh:</strong> Mathematics</small>
+                                                        <small class="d-block">Fractions Practice</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 mb-2 schedule-card">
+                                                        <small><strong>Group:</strong> Morning Review</small>
+                                                        <small class="d-block">Daily goals setting</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> English</small>
+                                                        <small class="d-block">Reading Comprehension</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 mb-2 schedule-card">
+                                                        <small><strong>Group:</strong> Morning Review</small>
+                                                        <small class="d-block">Daily goals setting</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-josh p-2 mb-2 schedule-card">
+                                                        <small><strong>Josh:</strong> Science</small>
+                                                        <small class="d-block">Simple Machines Project</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-iggie p-2 mb-2 schedule-card">
+                                                        <small><strong>Iggie:</strong> Outdoor Activity</small>
+                                                        <small class="d-block">Park visit</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-light">9:00 - 10:00</td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> Mathematics</small>
+                                                        <small class="d-block">Multiplication Practice</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-josh p-2 mb-2 schedule-card">
+                                                        <small><strong>Josh:</strong> English</small>
+                                                        <small class="d-block">Creative Writing</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-iggie p-2 mb-2 schedule-card">
+                                                        <small><strong>Iggie:</strong> Numbers</small>
+                                                        <small class="d-block">Counting 1-10</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> Science</small>
+                                                        <small class="d-block">Plant Observation</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 mb-2 schedule-card">
+                                                        <small><strong>Group:</strong> Science Experiment</small>
+                                                        <small class="d-block">Water cycle demonstration</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 mb-2 schedule-card">
+                                                        <small><strong>Group:</strong> Art Project</small>
+                                                        <small class="d-block">Family collage</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-light">10:00 - 11:00</td>
+                                                <td>
+                                                    <div class="event-iggie p-2 mb-2 schedule-card">
+                                                        <small><strong>Iggie:</strong> Letters</small>
+                                                        <small class="d-block">A-E Recognition</small>
+                                                    </div>
+                                                    <div class="event-josh p-2 schedule-card">
+                                                        <small><strong>Josh:</strong> Social Studies</small>
+                                                        <small class="d-block">Kenyan History</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> Kiswahili</small>
+                                                        <small class="d-block">Vocabulary Building</small>
+                                                    </div>
+                                                    <div class="event-iggie p-2 schedule-card">
+                                                        <small><strong>Iggie:</strong> Colors</small>
+                                                        <small class="d-block">Sorting Activity</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-josh p-2 mb-2 schedule-card">
+                                                        <small><strong>Josh:</strong> Mathematics</small>
+                                                        <small class="d-block">Problem Solving</small>
+                                                    </div>
+                                                    <div class="event-nancy p-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> CRE</small>
+                                                        <small class="d-block">Bible Stories</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-iggie p-2 mb-2 schedule-card">
+                                                        <small><strong>Iggie:</strong> Motor Skills</small>
+                                                        <small class="d-block">Puzzle Time</small>
+                                                    </div>
+                                                    <div class="event-josh p-2 schedule-card">
+                                                        <small><strong>Josh:</strong> English</small>
+                                                        <small class="d-block">Grammar Exercises</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> Mathematics</small>
+                                                        <small class="d-block">Word Problems</small>
+                                                    </div>
+                                                    <div class="event-iggie p-2 schedule-card">
+                                                        <small><strong>Iggie:</strong> Story Time</small>
+                                                        <small class="d-block">Picture books</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Educational Movie</small>
+                                                        <small class="d-block">Nature documentary</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-light">11:00 - 12:00</td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Break & Snack</small>
+                                                        <small class="d-block">Outdoor play</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Break & Snack</small>
+                                                        <small class="d-block">Outdoor play</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Break & Snack</small>
+                                                        <small class="d-block">Outdoor play</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Break & Snack</small>
+                                                        <small class="d-block">Outdoor play</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Break & Snack</small>
+                                                        <small class="d-block">Outdoor play</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Lunch</small>
+                                                        <small class="d-block">Family meal</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-light">12:00 - 1:00</td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> Environmental Studies</small>
+                                                        <small class="d-block">Local ecosystem</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-josh p-2 mb-2 schedule-card">
+                                                        <small><strong>Josh:</strong> Science</small>
+                                                        <small class="d-block">Research Time</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Music Time</small>
+                                                        <small class="d-block">Singing & instruments</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-nancy p-2 mb-2 schedule-card">
+                                                        <small><strong>Nancy:</strong> Creative Arts</small>
+                                                        <small class="d-block">Drawing techniques</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-josh p-2 mb-2 schedule-card">
+                                                        <small><strong>Josh:</strong> Project Work</small>
+                                                        <small class="d-block">Science presentation</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Free Time</small>
+                                                        <small class="d-block">Individual interests</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-light">1:00 - 2:00</td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Lunch</small>
+                                                        <small class="d-block">Family meal</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Lunch</small>
+                                                        <small class="d-block">Family meal</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Lunch</small>
+                                                        <small class="d-block">Family meal</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Lunch</small>
+                                                        <small class="d-block">Family meal</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Lunch</small>
+                                                        <small class="d-block">Family meal</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="event-group p-2 schedule-card">
+                                                        <small><strong>Group:</strong> Outdoor Activity</small>
+                                                        <small class="d-block">Nature walk</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Goals -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Weekly Goals & Objectives</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6>Josh's Goals</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="joshGoal1">
+                                                    <label class="form-check-label" for="joshGoal1">Complete fractions worksheet</label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="joshGoal2">
+                                                    <label class="form-check-label" for="joshGoal2">Science project research</label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="joshGoal3">
+                                                    <label class="form-check-label" for="joshGoal3">Improve English grammar skills</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>Nancy's Goals</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="nancyGoal1" checked>
+                                                    <label class="form-check-label" for="nancyGoal1">Multiplication tables practice</label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="nancyGoal2">
+                                                    <label class="form-check-label" for="nancyGoal2">Plant growth journal update</label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="nancyGoal3">
+                                                    <label class="form-check-label" for="nancyGoal3">Kiswahili vocabulary expansion</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>Iggie's Goals</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="iggieGoal1" checked>
+                                                    <label class="form-check-label" for="iggieGoal1">Letter recognition A-H</label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="iggieGoal2">
+                                                    <label class="form-check-label" for="iggieGoal2">Counting objects 1-10</label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="iggieGoal3">
+                                                    <label class="form-check-label" for="iggieGoal3">Color matching game</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily View Tab -->
+                    <div class="tab-pane fade" id="daily" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-calendar-day me-2"></i>Daily Schedule: Wednesday, October 18, 2023</h4>
+                        </div>
+
+                        <!-- Day Navigation -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-chevron-left me-1"></i> Previous Day
+                                    </button>
+                                    <div>
+                                        <span class="mx-2">October 2023</span>
+                                        <button class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-calendar me-1"></i> Select Date
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-outline-primary">
+                                        Next Day <i class="fas fa-chevron-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Timeline -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Daily Timeline</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="hourly-schedule">
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">8:00 AM</div>
+                                                <div class="schedule-event event-nancy" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Nancy:</strong> English - Reading Comprehension</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">9:00 AM</div>
+                                                <div class="schedule-event event-iggie" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Iggie:</strong> Numbers - Counting 1-10</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">10:00 AM</div>
+                                                <div class="schedule-event event-josh" style="top: 5px; left: 80px; right: 55%; height: 50px;">
+                                                    <small><strong>Josh:</strong> Mathematics - Problem Solving</small>
+                                                </div>
+                                                <div class="schedule-event event-nancy" style="top: 5px; left: 55%; right: 20px; height: 50px;">
+                                                    <small><strong>Nancy:</strong> CRE - Bible Stories</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">11:00 AM</div>
+                                                <div class="schedule-event event-group" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Group:</strong> Break & Snack - Outdoor play</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">12:00 PM</div>
+                                                <div class="schedule-event event-group" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Group:</strong> Music Time - Singing & instruments</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">1:00 PM</div>
+                                                <div class="schedule-event event-group" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Group:</strong> Lunch - Family meal</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">2:00 PM</div>
+                                                <div class="schedule-event event-josh" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Josh:</strong> Project Work - Science presentation</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">3:00 PM</div>
+                                                <div class="schedule-event event-nancy" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Nancy:</strong> Environmental Studies - Local ecosystem</small>
+                                                </div>
+                                            </div>
+                                            <div class="hour-block">
+                                                <div class="text-muted" style="position: absolute; left: 10px; top: 5px;">4:00 PM</div>
+                                                <div class="schedule-event event-group" style="top: 5px; left: 80px; right: 20px; height: 50px;">
+                                                    <small><strong>Group:</strong> Free Time - Individual interests</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="m-0">Daily Focus Areas</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6>Josh</h6>
+                                                <ul class="small">
+                                                    <li>Mathematics problem solving</li>
+                                                    <li>Science project development</li>
+                                                </ul>
+                                                
+                                                <h6>Nancy</h6>
+                                                <ul class="small">
+                                                    <li>Reading comprehension skills</li>
+                                                    <li>CRE story understanding</li>
+                                                </ul>
+                                                
+                                                <h6>Iggie</h6>
+                                                <ul class="small">
+                                                    <li>Number recognition 1-10</li>
+                                                    <li>Following instructions</li>
+                                                </ul>
+                                                
+                                                <h6>Group</h6>
+                                                <ul class="small">
+                                                    <li>Music appreciation</li>
+                                                    <li>Collaborative play</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Notes -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Daily Notes & Observations</h5>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-control" rows="4" placeholder="Enter notes about today's lessons, student progress, or adjustments needed...">Josh struggled with word problems but showed improvement with fractions. Nancy excelled in reading comprehension. Iggie enjoyed counting activities but had difficulty with number 7-8 recognition. Need to incorporate more hands-on activities for Josh's science project.</textarea>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-save me-1"></i> Save Notes
+                                    </button>
+                                    <button class="btn btn-outline-secondary ms-2">
+                                        <i class="fas fa-sticky-note me-1"></i> Add to Progress Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly View Tab -->
+                    <div class="tab-pane fade" id="monthly" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-calendar-alt me-2"></i>Monthly Schedule: October 2023</h4>
+                        </div>
+
+                        <!-- Month Navigation -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-chevron-left me-1"></i> September
+                                    </button>
+                                    <h5 class="m-0">October 2023</h5>
+                                    <button class="btn btn-outline-primary">
+                                        November <i class="fas fa-chevron-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Calendar -->
+                        <div class="card mb-4">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered m-0">
+                                        <thead>
+                                            <tr class="bg-light">
+                                                <th>Sun</th>
+                                                <th>Mon</th>
+                                                <th>Tue</th>
+                                                <th>Wed</th>
+                                                <th>Thu</th>
+                                                <th>Fri</th>
+                                                <th>Sat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-muted">1</td>
+                                                <td class="text-muted">2</td>
+                                                <td class="text-muted">3</td>
+                                                <td class="text-muted">4</td>
+                                                <td class="text-muted">5</td>
+                                                <td class="text-muted">6</td>
+                                                <td class="text-muted">7</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">8</td>
+                                                <td class="text-muted">9</td>
+                                                <td class="text-muted">10</td>
+                                                <td class="text-muted">11</td>
+                                                <td class="text-muted">12</td>
+                                                <td class="text-muted">13</td>
+                                                <td class="text-muted">14</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">15</td>
+                                                <td>
+                                                    <div class="calendar-day">16</div>
+                                                    <div class="event-josh p-1 mt-1 small">
+                                                        <small>Josh: Math Test</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">17</div>
+                                                    <div class="event-nancy p-1 mt-1 small">
+                                                        <small>Nancy: Science Due</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day active">18</div>
+                                                    <div class="event-group p-1 mt-1 small">
+                                                        <small>Group: Music</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">19</div>
+                                                    <div class="event-iggie p-1 mt-1 small">
+                                                        <small>Iggie: Dr. Appt</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">20</div>
+                                                    <div class="event-josh p-1 mt-1 small">
+                                                        <small>Josh: Sci Pres</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">21</div>
+                                                    <div class="event-group p-1 mt-1 small">
+                                                        <small>Family Day</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="calendar-day">22</div>
+                                                    <div class="event-group p-1 mt-1 small">
+                                                        <small>Church</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">23</div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">24</div>
+                                                    <div class="event-nancy p-1 mt-1 small">
+                                                        <small>Nancy: Math Test</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">25</div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">26</div>
+                                                    <div class="event-josh p-1 mt-1 small">
+                                                        <small>Josh: English Due</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">27</div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">28</div>
+                                                    <div class="event-group p-1 mt-1 small">
+                                                        <small>Field Trip</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="calendar-day">29</div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">30</div>
+                                                    <div class="event-iggie p-1 mt-1 small">
+                                                        <small>Iggie: Eval</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="calendar-day">31</div>
+                                                    <div class="event-group p-1 mt-1 small">
+                                                        <small>Halloween</small>
+                                                    </div>
+                                                </td>
+                                                <td class="text-muted">1</td>
+                                                <td class="text-muted">2</td>
+                                                <td class="text-muted">3</td>
+                                                <td class="text-muted">4</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Month Overview -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">October Overview</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Important Dates</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="fas fa-book me-2 text-primary"></i>
+                                                    <span>Josh Science Project Due</span>
+                                                </div>
+                                                <span class="badge bg-primary">Oct 20</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="fas fa-calculator me-2 text-success"></i>
+                                                    <span>Nancy Mathematics Test</span>
+                                                </div>
+                                                <span class="badge bg-success">Oct 24</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="fas fa-pencil-alt me-2 text-primary"></i>
+                                                    <span>Josh English Assignment Due</span>
+                                                </div>
+                                                <span class="badge bg-primary">Oct 26</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="fas fa-bus me-2 text-warning"></i>
+                                                    <span>Educational Field Trip</span>
+                                                </div>
+                                                <span class="badge bg-warning">Oct 28</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Monthly Goals</h6>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar" role="progressbar" style="width: 65%">Josh: 65% of goals</div>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 80%">Nancy: 80% of goals</div>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%">Iggie: 75% of goals</div>
+                                        </div>
+                                        
+                                        <h6 class="mt-4">Curriculum Focus</h6>
+                                        <ul class="small">
+                                            <li>Mathematics: Fractions & Multiplication</li>
+                                            <li>Science: Environmental Studies</li>
+                                            <li>Language: Reading Comprehension</li>
+                                            <li>Creative Arts: Drawing Techniques</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Planning Tab -->
+                    <div class="tab-pane fade" id="resources" role="tabpanel">
+                        <div class="category-header">
+                            <h4><i class="fas fa-tools me-2"></i>Resource Planning & Preparation</h4>
+                        </div>
+
+                        <!-- Weekly Preparation -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Weekly Resource Preparation</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Materials Needed</h6>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="material1" checked>
+                                            <label class="form-check-label" for="material1">Mathematics worksheets (Fractions)</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="material2">
+                                            <label class="form-check-label" for="material2">Science experiment materials</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="material3" checked>
+                                            <label class="form-check-label" for="material3">Reading comprehension passages</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="material4">
+                                            <label class="form-check-label" for="material4">Art supplies for group project</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="material5">
+                                            <label class="form-check-label" for="material5">Counting manipulatives for Iggie</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Digital Resources</h6>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="digital1" checked>
+                                            <label class="form-check-label" for="digital1">Download fractions video lesson</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="digital2">
+                                            <label class="form-check-label" for="digital2">Prepare science presentation slides</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="digital3" checked>
+                                            <label class="form-check-label" for="digital3">Find Kiswahili vocabulary games</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="digital4">
+                                            <label class="form-check-label" for="digital4">Source educational documentary</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resource Inventory -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Resource Inventory</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Supplies Needed</h6>
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            <strong>Low on supplies:</strong> Printer paper, colored pencils, glue sticks
+                                        </div>
+                                        <button class="btn btn-outline-primary mb-3">
+                                            <i class="fas fa-list me-1"></i> Generate Shopping List
+                                        </button>
+                                        
+                                        <h6 class="mt-4">Library Resources</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Mathematics Textbooks
+                                                <span class="badge bg-success">Available</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Science Experiment Kit
+                                                <span class="badge bg-warning">Reserved</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Early Reader Books
+                                                <span class="badge bg-success">Available</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Digital Resources Status</h6>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar" role="progressbar" style="width: 85%">Mathematics: 85% prepared</div>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 90%">Science: 90% prepared</div>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 65%">Language Arts: 65% prepared</div>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 75%">Creative Arts: 75% prepared</div>
+                                        </div>
+                                        
+                                        <button class="btn btn-outline-primary">
+                                            <i class="fas fa-cloud-download-alt me-1"></i> Download All Resources
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preparation Timeline -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="m-0">Preparation Timeline</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>This Week's Preparation</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Mathematics worksheets</span>
+                                                    <span class="badge bg-success">Completed</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 16</small>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Science experiment setup</span>
+                                                    <span class="badge bg-warning">In Progress</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 18</small>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Reading materials</span>
+                                                    <span class="badge bg-success">Completed</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 17</small>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Art supplies organization</span>
+                                                    <span class="badge bg-secondary">Not Started</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 20</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Next Week's Preparation</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Social studies materials</span>
+                                                    <span class="badge bg-secondary">Not Started</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 23</small>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Mathematics assessment</span>
+                                                    <span class="badge bg-secondary">Not Started</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 24</span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Science field trip planning</span>
+                                                    <span class="badge bg-info">Planning</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 25</small>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Creative writing prompts</span>
+                                                    <span class="badge bg-secondary">Not Started</span>
+                                                </div>
+                                                <small class="text-muted">Due: Oct 26</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="text-center py-4 mt-5">
+                    <div class="text-muted">
+                        <small>David Home School &copy; 2025. Designed for Josh, Nancy, and Iggie's educational journey.</small>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="modal fade" id="addEventModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Event Title</label>
+                            <input type="text" class="form-control" placeholder="Enter event title">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">For Student</label>
+                            <select class="form-select">
+                                <option selected>All Students</option>
+                                <option>Josh Only</option>
+                                <option>Nancy Only</option>
+                                <option>Iggie Only</option>
+                                <option>Group Activity</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subject/Category</label>
+                            <select class="form-select">
+                                <option selected>Mathematics</option>
+                                <option>English</option>
+                                <option>Science</option>
+                                <option>Social Studies</option>
+                                <option>Kiswahili</option>
+                                <option>CRE</option>
+                                <option>Creative Arts</option>
+                                <option>Physical Education</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Start Date & Time</label>
+                                <input type="datetime-local" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">End Date & Time</label>
+                                <input type="datetime-local" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter event description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Resources Needed</label>
+                            <textarea class="form-control" rows="2" placeholder="List any resources needed for this event"></textarea>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="repeatEvent">
+                            <label class="form-check-label" for="repeatEvent">Repeat weekly</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Add Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Student filter functionality
+            const studentFilters = document.querySelectorAll('.student-filter');
+            studentFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    studentFilters.forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Here you would filter the schedule based on the selected student
+                    const student = this.dataset.student;
+                    console.log(`Filtering for: ${student}`);
+                    // Actual filtering implementation would go here
+                });
+            });
+            
+            // Calendar day selection
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            calendarDays.forEach(day => {
+                day.addEventListener('click', function() {
+                    calendarDays.forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Here you would update the schedule to show the selected day
+                    const date = this.textContent;
+                    console.log(`Selected date: October ${date}, 2023`);
+                    // Actual date loading implementation would go here
+                });
+            });
+            
+            // Simulate adding a new event
+            const addEventButton = document.querySelector('[data-bs-target="#addEventModal"]');
+            addEventButton.addEventListener('click', function() {
+                // Reset form when opening modal
+                const modalForm = document.querySelector('#addEventModal form');
+                modalForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
